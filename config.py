@@ -11,8 +11,10 @@ config = {
     "label_field":"DamslActTag",
 
     "max_len":256,
-    "batch_size":64,
-    "num_workers":4,
+    "batch_size":32, 
+#     64
+    "num_workers":2,
+#     4
     
     # model
     "model_name":"roberta-base", #roberta-base

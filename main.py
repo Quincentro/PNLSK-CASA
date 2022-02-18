@@ -1,12 +1,13 @@
-
 from config import config
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 from transformers import AutoTokenizer
 from models.ContextAwareDAC import ContextAwareDAC
 from Trainer import LightningModel
 from pytorch_lightning.callbacks import EarlyStopping, ProgressBar, ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 import pytorch_lightning as pl
-import os
+
 
 
 if __name__=="__main__":
@@ -42,7 +43,7 @@ if __name__=="__main__":
         trainer = pl.Trainer(
             resume_from_checkpoint=config['restart_checkpoint'],
             logger=logger,
-            gpus=[0],
+            gpus=0,
             checkpoint_callback=checkpoints,
             callbacks=[early_stopping],
             default_root_dir="./models/",
@@ -53,7 +54,7 @@ if __name__=="__main__":
     else:
         trainer = pl.Trainer(
             logger=logger,
-            gpus=[0],
+            gpus=0,
             checkpoint_callback=checkpoints,
             callbacks=[early_stopping],
             default_root_dir="./models/",
@@ -62,7 +63,9 @@ if __name__=="__main__":
             automatic_optimization=True
         )
 
-        
+    print("---training---") 
     trainer.fit(model)
     
+    print("---testing---") 
     trainer.test(model)
+   
